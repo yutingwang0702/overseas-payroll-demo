@@ -12,7 +12,7 @@ const TONE = {
   nodeStatus: { '已完成': 'success', '进行中': 'primary', '临期': 'warning', '逾期': 'danger' },
   mode: { '模式A': 'primary', '模式B': 'warning', '模式C': 'purple' },
   changeType: { '入职': 'success', '离职': 'danger', '调薪': 'primary', '外派': 'purple', '补贴变更': 'warning', '银行账户变更': 'gray' },
-  changeStatus: { '待确认': 'warning', '已确认': 'primary', '已提交': 'primary', '供应商已受理': 'purple', '已体现在报告': 'primary', '已发放': 'success' },
+  changeStatus: { '待确认': 'warning', '已确认': 'primary', '已提交': 'primary', '供应商已受理': 'purple', '已体现在账单': 'primary', '已发放': 'success' },
   risk: { '高': 'danger', '中': 'warning', '低': 'primary', '无': 'gray' },
   reportStatus: { '待审核': 'warning', 'AI预审完成': 'purple', '待审批': 'primary', '已确认': 'success' },
   split: { '已拆分': 'success', '待人工': 'warning' },
@@ -29,7 +29,7 @@ const TONE = {
   payStatus: { '待发送': 'gray', '已发送': 'primary', '已执行': 'success', '失败': 'danger' },
   eorCheck: { '一致': 'success', '多计服务费': 'danger' },
   pushStatus: { '草稿': 'gray', '已推送': 'primary', '已回执': 'success' },
-  vchCheck: { '与确认报告一致': 'success', '不一致': 'danger' }
+  vchCheck: { '与确认账单一致': 'success', '不一致': 'danger' }
 };
 
 /* ============================================================
@@ -50,14 +50,14 @@ Pages.dashboard = function (container) {
       '<div class="kpi-card"><div class="kpi-icon red"><svg viewBox="0 0 24 24"><path d="M12 3L22 20H2z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6"/></svg></div>' +
         '<div><div class="kpi-label">逾期节点</div><div class="kpi-value red">' + k.overdue + '</div><div class="kpi-trend">菲律宾 / 印度 / 墨西哥 CutOff 逾期</div></div></div>' +
       '<div class="kpi-card"><div class="kpi-icon orange"><svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6z"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg></div>' +
-        '<div><div class="kpi-label">待审报告</div><div class="kpi-value orange">' + k.reportsPending + '</div><div class="kpi-trend">其中 AI 预审完成 5 份</div></div></div>' +
+        '<div><div class="kpi-label">待审账单</div><div class="kpi-value orange">' + k.reportsPending + '</div><div class="kpi-trend">其中 AI 预审完成 5 份</div></div></div>' +
       '<div class="kpi-card"><div class="kpi-icon green"><svg viewBox="0 0 24 24"><path d="M4 9h13M13 4l5 5-5 5"/><path d="M20 15H7M11 20l-5-5 5-5"/></svg></div>' +
         '<div><div class="kpi-label">待确认异动</div><div class="kpi-value green">' + k.changesPending + '</div><div class="kpi-trend">SF 邮件 9 条 · 手工补录 3 条</div></div></div>' +
     '</div>' +
 
     '<div class="card">' +
       '<div class="card-title"><span><span class="title-bar"></span>11 月周期进度</span><span class="title-sub">国际薪酬 11 步月度流程</span></div>' +
-      '<div class="progress-note">当前整体进行至第 <b>4 步「审报告」</b>，已完成 3 / 11 步；剩余节点按发薪日历自动推进与提醒。</div>' +
+      '<div class="progress-note">当前整体进行至第 <b>4 步「审账单」</b>，已完成 3 / 11 步；剩余节点按发薪日历自动推进与提醒。</div>' +
       '<div class="steps">' + stepsHTML + '</div>' +
     '</div>' +
 
@@ -157,7 +157,7 @@ Pages.calendar = function (container) {
  * ============================================================ */
 Pages.changes = function (container) {
   const types = ['全部'].concat(App.unique(DB.changes.map(function (c) { return c.type; })));
-  const statuses = ['全部', '待确认', '已确认', '已提交', '供应商已受理', '已体现在报告', '已发放'];
+  const statuses = ['全部', '待确认', '已确认', '已提交', '供应商已受理', '已体现在账单', '已发放'];
 
   container.innerHTML =
     '<div class="card">' +
@@ -340,11 +340,11 @@ function expatCardHTML(p) {
 }
 
 /* ============================================================
- * 5. 报告中心（#/reports）与审核详情（#/reports/:id）
+ * 5. 账单中心（#/reports）与审核详情（#/reports/:id）
  * ============================================================ */
 Pages.reports = function (container) {
   const cols = [
-    { label: '报告编号', render: function (r) { return '<b>' + App.esc(r.id) + '</b>'; } },
+    { label: '账单编号', render: function (r) { return '<b>' + App.esc(r.id) + '</b>'; } },
     { label: '周期', cls: 'ta-c', render: function (r) { return r.period; } },
     { label: '国家', render: function (r) { return App.esc(r.country); } },
     { label: '主体', render: function (r) { return App.esc(r.entity); } },
@@ -365,7 +365,7 @@ Pages.reports = function (container) {
 
   container.innerHTML =
     '<div class="card">' +
-      '<div class="card-title"><span><span class="title-bar"></span>算薪报告列表</span><span class="title-sub">点击行进入审核详情（演示版含 BIPO-越南 / TMF-德国 完整审核流）</span></div>' +
+      '<div class="card-title"><span><span class="title-bar"></span>算薪账单列表</span><span class="title-sub">点击行进入审核详情（演示版含 BIPO-越南 / TMF-德国 完整审核流）</span></div>' +
       '<div id="rpt-table">' + App.table(cols, DB.reports, { rowClick: true }) + '</div>' +
     '</div>';
 
@@ -374,7 +374,7 @@ Pages.reports = function (container) {
     if (!tr) return;
     const r = DB.reports[Number(tr.getAttribute('data-idx'))];
     if (r.hasDetail === false) {
-      App.toast('演示版仅提供 BIPO-越南 与 TMF-德国 两份报告的完整审核详情', 'info');
+      App.toast('演示版仅提供 BIPO-越南 与 TMF-德国 两份账单的完整审核详情', 'info');
       return;
     }
     location.hash = '#/reports/' + r.id;
@@ -384,7 +384,7 @@ Pages.reports = function (container) {
 Pages.reportDetail = function (container, id) {
   const r = DB.reports.find(function (x) { return x.id === id; });
   if (!r || !r.dims) {
-    container.innerHTML = '<div class="card notfound"><h2>未找到报告</h2><p>报告 ' + App.esc(String(id)) + ' 不存在或演示数据未包含其详情。</p><p class="mt8"><a class="btn btn-primary" href="#/reports">返回报告列表</a></p></div>';
+    container.innerHTML = '<div class="card notfound"><h2>未找到账单</h2><p>账单 ' + App.esc(String(id)) + ' 不存在或演示数据未包含其详情。</p><p class="mt8"><a class="btn btn-primary" href="#/reports">返回账单列表</a></p></div>';
     return;
   }
 
@@ -438,14 +438,14 @@ Pages.reportDetail = function (container, id) {
     const pending = unhandled().length;
     const approved = r.status === '待审批' || r.status === '已确认';
     const submitBtn = approved
-      ? '<button class="btn btn-lg" disabled>' + (r.status === '已确认' ? '报告已确认' : '已提交审批') + '</button>'
+      ? '<button class="btn btn-lg" disabled>' + (r.status === '已确认' ? '账单已确认' : '已提交审批') + '</button>'
       : '<button class="btn btn-primary btn-lg" id="btn-approve">提交审批</button>';
     const abNote = approved
       ? '审批摘要：总额 ' + App.money(r.total, r.currency) + ' · 人头 ' + r.headcount + ' · AI 预审 ' + App.esc(r.aiSummary)
       : '疑似异常与低置信度项全部处理完成后方可提交审批（当前未处理 <b style="color:#F5222D">' + pending + '</b> 项）';
 
     container.innerHTML =
-      '<a class="back-link" href="#/reports">← 返回报告列表</a>' +
+      '<a class="back-link" href="#/reports">← 返回账单列表</a>' +
       '<div class="card">' +
         '<div class="card-title"><span><span class="title-bar"></span>' + App.esc(r.id) + ' · 审核详情</span>' + App.badge(r.status, TONE.reportStatus[r.status]) + '</div>' +
         '<div class="report-header-info">' +
@@ -464,7 +464,7 @@ Pages.reportDetail = function (container, id) {
       '<div class="card">' +
         '<div class="card-title"><span><span class="title-bar"></span>五维自动比对</span><span class="title-sub">总额 / 人头 / 个税 / 社保 / 汇率折算</span></div>' +
         '<div class="table-wrap"><table class="table"><thead><tr>' +
-          '<th>维度</th><th class="ta-r">基准值</th><th class="ta-r">报告值</th><th class="ta-r">差异</th><th class="ta-r">差异率</th><th class="ta-c">阈值</th><th class="ta-c">结论</th>' +
+          '<th>维度</th><th class="ta-r">基准值</th><th class="ta-r">账单值</th><th class="ta-r">差异</th><th class="ta-r">差异率</th><th class="ta-c">阈值</th><th class="ta-c">结论</th>' +
         '</tr></thead><tbody>' + dimRows + '</tbody></table></div>' +
       '</div>' +
 
@@ -501,7 +501,7 @@ Pages.reportDetail = function (container, id) {
           return;
         }
         r.status = '待审批';
-        App.toast('报告 ' + r.id + ' 已提交薪酬主管审批，确认凭证已生成', 'success');
+        App.toast('账单 ' + r.id + ' 已提交薪酬主管审批，确认凭证已生成', 'success');
         render();
       });
     }
@@ -542,7 +542,7 @@ Pages.payslips = function (container) {
         '<div class="stat-cell"><div class="sl">金额校验通过</div><div class="sv green">' + s.pass + ' 张</div></div>' +
         '<div class="stat-cell"><div class="sl">校验异常</div><div class="sv red">' + s.abnormal + ' 张</div></div>' +
       '</div>' +
-      '<div class="hint-text mt8">校验口径：工资单 PDF 净额与确认版报告该员工净额比对；点击行查看单人工资单预览。</div>' +
+      '<div class="hint-text mt8">校验口径：工资单 PDF 净额与确认版账单该员工净额比对；点击行查看单人工资单预览。</div>' +
     '</div>' +
     '<div class="card">' +
       '<div class="card-title"><span><span class="title-bar"></span>工资单列表</span><span class="title-sub">拆分 / 校验 / 发放状态跟踪</span></div>' +
@@ -947,7 +947,7 @@ function aiReply(text) {
     return '关于本期与上期工资差异的逐项解释（基于工资单数据）：\n\n1. 新入职比例工资：首月按计薪天数 / 当月天数比例计算，通常低于标准月薪；\n2. Retro 追溯补差：调薪生效日早于当期时，差额以独立行项目补发（示例：越南员工 Nguyễn Thị Lan 10 月生效调薪，11 月补差 VND 34,900,000）；\n3. 汇率影响的补贴折算：本币定价补贴（如电脑补贴 ¥90/月）按当月度汇率折算当地币，汇率波动会导致该项小幅变化；\n4. 13薪预付：适用国家会在规定月份出现一次性 13薪 项目（如巴西 11 月含第一期 50%）。\n\n若核对后仍有疑问，我将为您转人工工单（预计 1 个工作日内响应），专员会收到附带差异分析的工单。';
   }
   if (fxWord) {
-    return '关于月度汇率折算口径的说明：\n\n1. 汇率来源：每月一套月度汇率（币种对 × 月份唯一），来源与取值日由财务口径统一指定（如上月末中间价），月内统一、不逐日波动；\n2. 应用场景：本币定价补贴折算（电脑补贴 ¥90/月 × 当月汇率）、成本折算人民币、Oracle 凭证折算；\n3. 审核阈值：汇率相关项比对差异阈值默认 0.5%，超出触发人工核对。\n\n示例：2026-11 月度汇率 1 CNY = 3,520 VND，电脑补贴 ¥90 折算为 VND 316,800，与供应商报告值比对。';
+    return '关于月度汇率折算口径的说明：\n\n1. 汇率来源：每月一套月度汇率（币种对 × 月份唯一），来源与取值日由财务口径统一指定（如上月末中间价），月内统一、不逐日波动；\n2. 应用场景：本币定价补贴折算（电脑补贴 ¥90/月 × 当月汇率）、成本折算人民币、Oracle 凭证折算；\n3. 审核阈值：汇率相关项比对差异阈值默认 0.5%，超出触发人工核对。\n\n示例：2026-11 月度汇率 1 CNY = 3,520 VND，电脑补贴 ¥90 折算为 VND 316,800，与供应商账单值比对。';
   }
   return '您好，您咨询的问题涉及个案具体情况，为保证准确性，我已为您创建人工工单（编号 SR-2026-' + Math.floor(1000 + Math.random() * 9000) + '），海外薪酬专员将在 1 个工作日内与您联系。\n\n您也可以补充说明具体情况（如所在国家、工资周期），我会先为您做初步分析。\n\n小提示：我可以直接回答这些常见问题——13薪规则、工资单差异解释（新入职比例工资 / retro 补差 / 汇率折算）、月度汇率折算口径。';
 }
@@ -1137,7 +1137,7 @@ Pages.vouchers = function (container) {
           '<div class="stat-cell"><div class="sl">已回执（Oracle 凭证号）</div><div class="sv green">' + receipt.length + ' 张</div><div class="hint-text">最新回执：' + App.esc(receiptLatest) + '</div></div>' +
           '<div class="stat-cell"><div class="sl">勾稽异常数</div><div class="sv red">' + abnormal + ' 张</div></div>' +
         '</div>' +
-        '<div class="hint-text mt8">勾稽口径：凭证借贷分录合计与确认版报告总额（按月度汇率折算）比对，不一致禁止推送 Oracle；点击行查看凭证分录预览。</div>' +
+        '<div class="hint-text mt8">勾稽口径：凭证借贷分录合计与确认版账单总额（按月度汇率折算）比对，不一致禁止推送 Oracle；点击行查看凭证分录预览。</div>' +
       '</div>' +
       '<div class="card">' +
         '<div class="card-title"><span><span class="title-bar"></span>总账凭证列表</span><span class="title-sub">周期 2026-11 · 本位币人民币 · 借贷平衡校验通过</span></div>' +
@@ -1157,7 +1157,7 @@ Pages.vouchers = function (container) {
         const v = list.find(function (x) { return x.id === btn.getAttribute('data-push'); });
         if (!v) return;
         if (v.checkStatus === '不一致') {
-          App.toast('勾稽不一致，禁止推送（' + v.id + '：' + (v.checkNote || '凭证与确认报告金额不一致') + '）', 'error');
+          App.toast('勾稽不一致，禁止推送（' + v.id + '：' + (v.checkNote || '凭证与确认账单金额不一致') + '）', 'error');
           return;
         }
         v.pushStatus = '已推送';
