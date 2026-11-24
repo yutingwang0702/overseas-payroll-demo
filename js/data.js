@@ -19,17 +19,17 @@ const DB = {
   kpi: {
     nodesTotal: 682,      // 本月节点总数
     overdue: 3,           // 逾期节点
-    reportsPending: 8,    // 待审报告
+    reportsPending: 8,    // 待审账单
     changesPending: 12    // 待确认异动
   },
 
-  /** 11 步月度流程（当前整体进度：第 4 步 审报告） */
+  /** 11 步月度流程（当前整体进度：第 4 步 审账单） */
   flowSteps: [
     { name: '启发薪', state: 'done' },
     { name: '提异动', state: 'done' },
-    { name: '收报告', state: 'done' },
-    { name: '审报告', state: 'current' },
-    { name: '确报告', state: 'pending' },
+    { name: '收账单', state: 'done' },
+    { name: '审账单', state: 'current' },
+    { name: '确账单', state: 'pending' },
     { name: '提工资', state: 'pending' },
     { name: '提个税', state: 'pending' },
     { name: '提社保', state: 'pending' },
@@ -91,8 +91,8 @@ const DB = {
   /** 本月提醒计划（即将到期节点） */
   reminders: [
     { node: '菲律宾 · TMF EOR Philippines · 提异动 CutOff', deadline: '2026-11-14 23:59（马尼拉时区）', cfg: 'T-5 / T-3 / T-1 / T-0', status: '逾期' },
-    { node: '印度 · Gonex EOR India · 报告回收', deadline: '2026-11-24 18:00', cfg: 'CutOff 后超时 1 天自动催办', status: '进行中' },
-    { node: '德国 · Ruijie Germany GmbH · 审报告', deadline: '2026-11-25 18:00', cfg: 'T-3 / T-1', status: '进行中' },
+    { node: '印度 · Gonex EOR India · 账单回收', deadline: '2026-11-24 18:00', cfg: 'CutOff 后超时 1 天自动催办', status: '进行中' },
+    { node: '德国 · Ruijie Germany GmbH · 审账单', deadline: '2026-11-25 18:00', cfg: 'T-3 / T-1', status: '进行中' },
     { node: '日本 · Ruijie Japan K.K. · 提异动 CutOff', deadline: '2026-11-26 23:59（东京时区）', cfg: 'T-5 / T-3 / T-1 / T-0', status: '待触发' },
     { node: '巴西 · BIPO EOR Brazil · 提异动 CutOff', deadline: '2026-11-26 23:59（圣保罗时区）', cfg: 'T-5 / T-3 / T-1 / T-0', status: '待触发' },
     { node: '越南 · BIPO EOR Vietnam · 个税申报', deadline: '2026-12-05 18:00', cfg: 'T-3 / T-1', status: '待触发' },
@@ -112,20 +112,20 @@ const DB = {
         { s: '已确认', t: '2026-11-02 14:30', who: '丁笑冰' },
         { s: '已提交', t: '2026-11-03 10:05', who: '丁笑冰（批次 BATCH-2026-11-VN-BIPO-01）' },
         { s: '供应商已受理', t: '2026-11-03 15:42', who: 'BIPO · 陈氏梅' },
-        { s: '已体现在报告', t: '2026-11-12 11:20', who: '系统 · 报告解析勾稽' },
+        { s: '已体现在账单', t: '2026-11-12 11:20', who: '系统 · 账单解析勾稽' },
         { s: '已发放', t: '2026-11-13 09:00', who: 'BIPO（发薪日 09-13）' }
       ]
     },
     {
       id: 'CHG-2026-11-002', emp: '张伟', country: '美国', entity: 'Ruijie USA Inc.', type: '调薪', source: 'SF邮件',
-      eff: '2026-10-01', retro: true, status: '已体现在报告', risk: '无', batch: 'BATCH-2026-10-US-01',
+      eff: '2026-10-01', retro: true, status: '已体现在账单', risk: '无', batch: 'BATCH-2026-10-US-01',
       detail: { 调前月薪: 'USD 8,500（bi-weekly $3,923.08）', 调后月薪: 'USD 9,200', 生效日期: '2026-10-01', 口径: 'MONTHLY 月薪口径标注', 备注: '10 月已按旧标准发放，11 月周期生成 RETRO_PAY 补差' },
       timeline: [
         { s: '待确认', t: '2026-10-28 10:02', who: '系统 · SF 邮件自动抓取' },
         { s: '已确认', t: '2026-10-28 11:15', who: '赖泳成' },
         { s: '已提交', t: '2026-10-28 16:40', who: '赖泳成（批次 BATCH-2026-10-US-01）' },
         { s: '供应商已受理', t: '2026-10-29 09:20', who: '当地 Payroll · Mike Johnson' },
-        { s: '已体现在报告', t: '2026-11-11 14:00', who: '系统 · 报告解析勾稽' }
+        { s: '已体现在账单', t: '2026-11-11 14:00', who: '系统 · 账单解析勾稽' }
       ]
     },
     {
@@ -158,7 +158,7 @@ const DB = {
         { s: '已确认', t: '2026-10-10 10:12', who: '高菁' },
         { s: '已提交', t: '2026-10-10 14:00', who: '高菁（批次 BATCH-2026-10-JP-01）' },
         { s: '供应商已受理', t: '2026-10-11 09:30', who: 'TMF Japan · 佐藤健一' },
-        { s: '已体现在报告', t: '2026-11-10 16:00', who: '系统 · 报告解析勾稽' },
+        { s: '已体现在账单', t: '2026-11-10 16:00', who: '系统 · 账单解析勾稽' },
         { s: '已发放', t: '2026-11-10 09:00', who: 'TMF Japan' }
       ]
     },
@@ -253,7 +253,7 @@ const DB = {
     {
       id: 'CHG-2026-11-016', emp: 'Nguyễn Thị Lan', country: '越南', entity: 'BIPO EOR Vietnam', type: '调薪', source: 'SF邮件',
       eff: '2026-10-01', retro: true, status: '供应商已受理', risk: '低', batch: 'BATCH-2026-11-VN-BIPO-01',
-      detail: { 调前月薪: 'VND 68,000,000', 调后月薪: 'VND 74,000,000', 生效日期: '2026-10-01', 备注: '10 月已按旧标准发放，11 月周期补发差额（报告差异归因依据）' },
+      detail: { 调前月薪: 'VND 68,000,000', 调后月薪: 'VND 74,000,000', 生效日期: '2026-10-01', 备注: '10 月已按旧标准发放，11 月周期补发差额（账单差异归因依据）' },
       timeline: [
         { s: '待确认', t: '2026-10-26 09:20', who: '系统 · SF 邮件自动抓取' },
         { s: '已确认', t: '2026-10-26 10:05', who: '丁笑冰' },
@@ -263,14 +263,14 @@ const DB = {
     },
     {
       id: 'CHG-2026-11-017', emp: 'Trần Văn Bình', country: '越南', entity: 'BIPO EOR Vietnam', type: '补贴变更', source: 'SF邮件',
-      eff: '2026-11-01', retro: false, status: '已体现在报告', risk: '中', batch: 'BATCH-2026-11-VN-BIPO-01',
-      detail: { 变更项目: '电脑补贴（本币定价）', 标准: 'CNY 90 /月（按月度汇率折算 VND 316,800）', 生效日期: '2026-11-01', 备注: '审报告发现该员工社保个人部分为 0，已生成差异沟通函' },
+      eff: '2026-11-01', retro: false, status: '已体现在账单', risk: '中', batch: 'BATCH-2026-11-VN-BIPO-01',
+      detail: { 变更项目: '电脑补贴（本币定价）', 标准: 'CNY 90 /月（按月度汇率折算 VND 316,800）', 生效日期: '2026-11-01', 备注: '审账单发现该员工社保个人部分为 0，已生成差异沟通函' },
       timeline: [
         { s: '待确认', t: '2026-11-01 11:00', who: '系统 · SF 邮件自动抓取' },
         { s: '已确认', t: '2026-11-01 13:30', who: '丁笑冰' },
         { s: '已提交', t: '2026-11-03 10:05', who: '丁笑冰（批次 BATCH-2026-11-VN-BIPO-01）' },
         { s: '供应商已受理', t: '2026-11-03 15:42', who: 'BIPO · 陈氏梅' },
-        { s: '已体现在报告', t: '2026-11-12 11:20', who: '系统 · 报告解析勾稽' }
+        { s: '已体现在账单', t: '2026-11-12 11:20', who: '系统 · 账单解析勾稽' }
       ]
     },
     {
@@ -380,11 +380,11 @@ const DB = {
     }
   ],
 
-  /* ================= 报告中心 ================= */
+  /* ================= 账单中心 ================= */
 
   reports: [
     {
-      id: 'RPT-2026-11-VN-01', period: '2026-11', country: '越南', entity: 'BIPO EOR Vietnam', vendor: 'BIPO',
+      id: 'BILL-2026-11-VN-01', period: '2026-11', country: '越南', entity: 'BIPO EOR Vietnam', vendor: 'BIPO',
       version: 'V2', total: 1856400000, currency: 'VND', headcount: 28, receivedAt: '2026-11-12 10:32',
       aiSummary: '3 处差异：1 项合理 / 2 项疑似异常', status: '待审核',
       file: 'BIPO_VN_Payroll_202611_V2.xlsx', fileNote: '修正版 V2，声明替代 V1（V1 头数统计口径错误）',
@@ -408,21 +408,21 @@ const DB = {
         },
         {
           dim: '汇率折算', amount: '+64,100 VND', level: 'warn', confidence: '62%', handled: false, hasLetter: false,
-          reason: '电脑补贴折算差异 0.72%，超过 0.5% 阈值；疑未按当月度汇率（1 CNY = 3,520 VND）折算，报告数据不全，需人工核对。',
+          reason: '电脑补贴折算差异 0.72%，超过 0.5% 阈值；疑未按当月度汇率（1 CNY = 3,520 VND）折算，账单数据不全，需人工核对。',
           action: '人工核对汇率取值与补贴折算明细'
         }
       ],
       letter: {
         to: 'BIPO Vietnam · 陈氏梅（chen.thi.mai@bipo.com）',
-        subject: '【差异沟通函】2026-11 周期越南算薪报告（V2）社保差异确认',
-        body: '陈女士，您好：\n\n我方对贵司 2026-11 周期算薪报告（版本 V2，2026-11-12 接收）完成 AI 预审，发现以下差异需贵司确认：\n\n一、差异项：社保总额\n  · 我方基准值：VND 96,800,000\n  · 贵司报告值：VND 101,200,000\n  · 差异：+VND 4,400,000（+4.55%，在 ±5% 阈值内但勾稽异常）\n\n二、疑点：员工 Trần Văn Bình（工号 VN-0127）社保个人部分为 0，且该员工非双边社保互免适用人员。\n\n请贵司在 2 个工作日内核实并回复：\n（1）该员工社保是否已按越南当地法定费率申报缴纳；\n（2）若为算薪错误，请提供修正版报告并在文件中声明被替代版本。\n\n随函附：差异明细对照表、该员工报告行项目截图。\n\n顺颂商祺\n锐捷网络 海外薪酬团队\n2026-11-23'
+        subject: '【差异沟通函】2026-11 周期越南算薪账单（V2）社保差异确认',
+        body: '陈女士，您好：\n\n我方对贵司 2026-11 周期算薪账单（版本 V2，2026-11-12 接收）完成 AI 预审，发现以下差异需贵司确认：\n\n一、差异项：社保总额\n  · 我方基准值：VND 96,800,000\n  · 贵司账单值：VND 101,200,000\n  · 差异：+VND 4,400,000（+4.55%，在 ±5% 阈值内但勾稽异常）\n\n二、疑点：员工 Trần Văn Bình（工号 VN-0127）社保个人部分为 0，且该员工非双边社保互免适用人员。\n\n请贵司在 2 个工作日内核实并回复：\n（1）该员工社保是否已按越南当地法定费率申报缴纳；\n（2）若为算薪错误，请提供修正版账单并在文件中声明被替代版本。\n\n随函附：差异明细对照表、该员工账单行项目截图。\n\n顺颂商祺\n锐捷网络 海外薪酬团队\n2026-11-23'
       }
     },
     {
-      id: 'RPT-2026-11-DE-01', period: '2026-11', country: '德国', entity: 'Ruijie Germany GmbH', vendor: 'TMF',
+      id: 'BILL-2026-11-DE-01', period: '2026-11', country: '德国', entity: 'Ruijie Germany GmbH', vendor: 'TMF',
       version: 'V1', total: 486300, currency: 'EUR', headcount: 35, receivedAt: '2026-11-13 16:48',
       aiSummary: '2 处差异：1 项合理 / 1 项疑似异常', status: 'AI预审完成',
-      file: 'TMF_DE_Payroll_202611.pdf', fileNote: 'PDF 报告，LLM 辅助抽取关键字段',
+      file: 'TMF_DE_Payroll_202611.pdf', fileNote: 'PDF 账单，LLM 辅助抽取关键字段',
       dims: [
         { dim: '总额', base: 479200, report: 486300, threshold: '±2%', conclusion: 'pass' },
         { dim: '人头', base: 35, report: 35, threshold: '0', conclusion: 'pass' },
@@ -444,22 +444,22 @@ const DB = {
       ],
       letter: {
         to: 'TMF Germany · Anna Schmidt（a.schmidt@tmf-group.com）',
-        subject: '【差异沟通函】2026-11 周期德国算薪报告（V1）社保异常确认',
-        body: 'Frau Schmidt，您好：\n\n我方对贵司 2026-11 周期算薪报告（版本 V1，2026-11-13 接收）完成 AI 预审，发现以下异常需贵司确认：\n\n一、疑点：员工 Lukas Weber（工号 DE-0053）社保个人部分（Sozialversicherung）扣缴金额为 0。\n\n二、我方核对：\n  · 该员工本期调薪追溯异动（CHG-2026-11-018）仅影响个税，不影响社保参保状态；\n  · 该员工非中德社保互免协定适用人员。\n\n请贵司在 2 个工作日内核实并回复：\n（1）该员工社保是否正常申报缴纳，扣缴为 0 的原因；\n（2）若为算薪错误，请提供修正版报告（声明被替代版本）。\n\n随函附：差异明细对照表、该员工报告行项目截图。\n\n顺颂商祺\n锐捷网络 海外薪酬团队\n2026-11-23'
+        subject: '【差异沟通函】2026-11 周期德国算薪账单（V1）社保异常确认',
+        body: 'Frau Schmidt，您好：\n\n我方对贵司 2026-11 周期算薪账单（版本 V1，2026-11-13 接收）完成 AI 预审，发现以下异常需贵司确认：\n\n一、疑点：员工 Lukas Weber（工号 DE-0053）社保个人部分（Sozialversicherung）扣缴金额为 0。\n\n二、我方核对：\n  · 该员工本期调薪追溯异动（CHG-2026-11-018）仅影响个税，不影响社保参保状态；\n  · 该员工非中德社保互免协定适用人员。\n\n请贵司在 2 个工作日内核实并回复：\n（1）该员工社保是否正常申报缴纳，扣缴为 0 的原因；\n（2）若为算薪错误，请提供修正版账单（声明被替代版本）。\n\n随函附：差异明细对照表、该员工账单行项目截图。\n\n顺颂商祺\n锐捷网络 海外薪酬团队\n2026-11-23'
       }
     },
     {
-      id: 'RPT-2026-11-US-01', period: '2026-11', country: '美国', entity: 'Ruijie USA Inc.', vendor: '当地 Payroll',
+      id: 'BILL-2026-11-US-01', period: '2026-11', country: '美国', entity: 'Ruijie USA Inc.', vendor: '当地 Payroll',
       version: 'V3', total: 402800, currency: 'USD', headcount: 42, receivedAt: '2026-11-14 09:15',
       aiSummary: '无差异（五维全部通过）', status: '已确认', file: 'US_Payroll_202611_biweekly_V3.csv', hasDetail: false
     },
     {
-      id: 'RPT-2026-11-JP-01', period: '2026-11', country: '日本', entity: 'Ruijie Japan K.K.', vendor: 'TMF',
+      id: 'BILL-2026-11-JP-01', period: '2026-11', country: '日本', entity: 'Ruijie Japan K.K.', vendor: 'TMF',
       version: 'V2', total: 28960000, currency: 'JPY', headcount: 18, receivedAt: '2026-11-14 14:02',
       aiSummary: '1 处差异：1 项合理', status: '待审批', file: 'TMF_JP_Payroll_202611_V2.pdf', hasDetail: false
     },
     {
-      id: 'RPT-2026-11-SG-01', period: '2026-11', country: '新加坡', entity: 'Ruijie Singapore Pte. Ltd.', vendor: 'knit',
+      id: 'BILL-2026-11-SG-01', period: '2026-11', country: '新加坡', entity: 'Ruijie Singapore Pte. Ltd.', vendor: 'knit',
       version: 'V1', total: 168500, currency: 'SGD', headcount: 12, receivedAt: '2026-11-15 08:40',
       aiSummary: 'AI 预审进行中', status: '待审核', file: 'knit_SG_Payroll_202611_V1.xlsx', hasDetail: false
     }
@@ -512,12 +512,12 @@ const DB = {
     {
       emp: 'Trần Văn Bình', country: '越南', entity: 'BIPO EOR Vietnam', period: '2026-11',
       file: 'payslip_VN_TVB_202611.pdf', split: '已拆分', check: '不一致', pay: '已发放',
-      checkNote: '工资单净额 VND 38,200,000 ≠ 确认版报告净额 VND 39,050,000',
+      checkNote: '工资单净额 VND 38,200,000 ≠ 确认版账单净额 VND 39,050,000',
       lines: [
         { k: '基本工资', v: 'VND 46,000,000', note: '' },
         { k: '电脑补贴（¥90 × 3,520）', v: 'VND 316,800', note: '本币定价 · 月度汇率折算' },
         { k: '个税', v: '-VND 3,120,000', note: '' },
-        { k: '社保个人', v: 'VND 0', note: '疑似异常：报告中个人部分为 0（见差异沟通函）' }
+        { k: '社保个人', v: 'VND 0', note: '疑似异常：账单中个人部分为 0（见差异沟通函）' }
       ],
       net: 'VND 43,196,800（PDF 净额显示 VND 38,200,000，不一致）'
     },
@@ -703,7 +703,7 @@ const DB = {
   vouchers: [
     {
       id: 'VCH-202611-001', period: '2026-11', country: '美国', entity: 'Ruijie USA Inc.',
-      pushStatus: '已回执', oracleNo: 'ORA-773410', checkStatus: '与确认报告一致',
+      pushStatus: '已回执', oracleNo: 'ORA-773410', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-美国', amount: 1247000, note: '2026-11 bi-weekly 两期工资总额' },
         { dc: '借', account: '管理费用-社保公司', amount: 96000, note: 'FICA 雇主部分' },
@@ -714,9 +714,9 @@ const DB = {
     },
     {
       id: 'VCH-202611-002', period: '2026-11', country: '德国', entity: 'Ruijie Germany GmbH',
-      pushStatus: '已回执', oracleNo: 'ORA-773428', checkStatus: '与确认报告一致',
+      pushStatus: '已回执', oracleNo: 'ORA-773428', checkStatus: '与确认账单一致',
       entries: [
-        { dc: '借', account: '薪酬费用-德国', amount: 3281000, note: '确认版报告工资总额（含调薪追溯）' },
+        { dc: '借', account: '薪酬费用-德国', amount: 3281000, note: '确认版账单工资总额（含调薪追溯）' },
         { dc: '借', account: '管理费用-社保公司', amount: 489000, note: '法定社保雇主部分' },
         { dc: '贷', account: '应付工资', amount: 2743000, note: '净额部分' },
         { dc: '贷', account: '应交税费-个税', amount: 901000, note: 'Lohnsteuer 代扣' },
@@ -725,7 +725,7 @@ const DB = {
     },
     {
       id: 'VCH-202611-003', period: '2026-11', country: '日本', entity: 'Ruijie Japan K.K.',
-      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认报告一致',
+      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-日本', amount: 1284000, note: '工资总额（含 retro 补差）' },
         { dc: '借', account: '管理费用-社保公司', amount: 128000, note: '健康保险+年金雇主部分' },
@@ -736,7 +736,7 @@ const DB = {
     },
     {
       id: 'VCH-202611-004', period: '2026-11', country: '新加坡', entity: 'Ruijie Singapore Pte. Ltd.',
-      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认报告一致',
+      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-新加坡', amount: 862000, note: '代理发薪（knit）工资总额' },
         { dc: '贷', account: '应付工资', amount: 796000, note: '净额部分（外国人无 CPF）' },
@@ -747,7 +747,7 @@ const DB = {
     {
       id: 'VCH-202611-005', period: '2026-11', country: '越南', entity: 'BIPO EOR Vietnam',
       pushStatus: '草稿', oracleNo: '', checkStatus: '不一致',
-      checkNote: '确认报告社保总额 VND 101,200,000 ≠ 系统基准 VND 96,800,000（差异沟通函在途），凭证暂挂待差异闭环',
+      checkNote: '确认账单社保总额 VND 101,200,000 ≠ 系统基准 VND 96,800,000（差异沟通函在途），凭证暂挂待差异闭环',
       entries: [
         { dc: '借', account: '薪酬费用-越南', amount: 508100, note: 'EOR 账单实发薪酬折算' },
         { dc: '借', account: 'EOR服务费', amount: 19300, note: 'BIPO 服务费折算' },
@@ -759,7 +759,7 @@ const DB = {
     },
     {
       id: 'VCH-202611-006', period: '2026-11', country: '巴西', entity: 'BIPO EOR Brazil',
-      pushStatus: '草稿', oracleNo: '', checkStatus: '与确认报告一致',
+      pushStatus: '草稿', oracleNo: '', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-巴西', amount: 500300, note: 'EOR 账单实发薪酬折算（含 13薪 第一期）' },
         { dc: '借', account: 'EOR服务费', amount: 21500, note: 'BIPO 服务费折算（按合同费率）' },
@@ -771,7 +771,7 @@ const DB = {
     },
     {
       id: 'VCH-202611-007', period: '2026-11', country: '印度', entity: 'Gonex EOR India',
-      pushStatus: '草稿', oracleNo: '', checkStatus: '与确认报告一致',
+      pushStatus: '草稿', oracleNo: '', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-印度', amount: 456000, note: 'EOR 账单实发薪酬折算' },
         { dc: '借', account: 'EOR服务费', amount: 29400, note: 'Gonex 服务费折算' },
@@ -783,7 +783,7 @@ const DB = {
     },
     {
       id: 'VCH-202611-008', period: '2026-11', country: '英国', entity: 'Ruijie UK Ltd.',
-      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认报告一致',
+      pushStatus: '已推送', oracleNo: '', checkStatus: '与确认账单一致',
       entries: [
         { dc: '借', account: '薪酬费用-英国', amount: 1302000, note: '工资总额（9 月调薪生效）' },
         { dc: '借', account: '管理费用-社保公司', amount: 195000, note: 'Class 1 NI 雇主部分' },
