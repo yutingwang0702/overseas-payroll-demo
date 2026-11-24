@@ -341,7 +341,7 @@ input, select { font-family: inherit; }
 .profile-row .k { color: #64748B; }
 .profile-row .v { color: #1E293B; font-weight: 500; font-variant-numeric: tabular-nums; }
 
-/* ============ 报告审核 ============ */
+/* ============ 账单审核 ============ */
 .dim-cell-pass { color: #52C41A; font-weight: 600; }
 .dim-cell-warn { color: #D48806; font-weight: 600; }
 .dim-cell-error { color: #F5222D; font-weight: 600; }
