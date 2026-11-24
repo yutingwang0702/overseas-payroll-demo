@@ -139,7 +139,7 @@ const ROUTES = [
   { path: '/calendar', title: '发薪日历', page: 'calendar' },
   { path: '/changes', title: '异动管理', page: 'changes' },
   { path: '/expat', title: '外派档案', page: 'expat' },
-  { path: '/reports', title: '报告中心', page: 'reports' },
+  { path: '/reports', title: '账单中心', page: 'reports' },
   { path: '/payslips', title: '工资单中心', page: 'payslips' },
   { path: '/compliance', title: '个税社保', page: 'compliance' },
   { path: '/payments', title: '资金支付', page: 'payments' },
@@ -162,10 +162,10 @@ function renderRoute() {
   let arg = null;
   let navPath = path;
 
-  /* 报告详情：#/reports/:id */
+  /* 账单详情：#/reports/:id */
   const m = path.match(/^\/reports\/(.+)$/);
   if (m) {
-    title = '报告审核详情';
+    title = '账单审核详情';
     fn = Pages.reportDetail;
     arg = decodeURIComponent(m[1]);
     navPath = '/reports';
